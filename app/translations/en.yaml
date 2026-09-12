@@ -1,0 +1,25 @@
+auth:
+    login:
+        title: Sign in
+        error: Invalid email or password.
+        email: Email
+        password: Password
+        submit: Login
+    logout: Logout
+issue:
+    title: Issues
+    create: New Issue
+    refresh: Refresh
+    not_found: Issue not found.
+    title_empty: Title cannot be empty.
+    assigned: 'You have been assigned Issue #%number%'
+    changed: 'Issue #%number% has been changed'
+    created: 'Issue #%number% has been created'
+    empty: 'No issues found.'
+    status:
+        open: Open
+        in_progress: In Progress
+        closed: Closed
+        _invalid: Invalid Status.
+user:
+    not_found: Unknown User.

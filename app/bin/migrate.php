@@ -12,10 +12,6 @@ use Symfony\Component\Console\Application;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-if (file_exists(__DIR__ . '/../.env')) {
-	Dotenv\Dotenv::createImmutable(__DIR__ . '/../')->load();
-}
-
 $containerBuilder = new DI\ContainerBuilder();
 $containerBuilder->addDefinitions(__DIR__ . '/../src/bootstrap/dependencies.php');
 $container = $containerBuilder->build();

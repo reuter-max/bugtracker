@@ -3,21 +3,32 @@
 declare(strict_types=1);
 
 use App\Application\Service\AuthorizationService;
-use App\Domain\Repository\ActionRepositoryInterface;
+use App\Domain\Entity\IssueState;
+use App\Domain\Repository\{ActionRepositoryInterface, IssueStateRepositoryInterface, NotificationRepositoryInterface};
 use App\Domain\Repository\IssueRepositoryInterface;
 use App\Domain\Repository\RoleRepositoryInterface;
 use App\Domain\Repository\UserRepositoryInterface;
-use App\Infrastructure\Doctrine\Repository\DoctrineActionRepository;
-use App\Infrastructure\Doctrine\Repository\DoctrineIssueRepository;
-use App\Infrastructure\Doctrine\Repository\DoctrineRoleRepository;
-use App\Infrastructure\Doctrine\Repository\DoctrineUserRepository;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\ORMSetup;
+use App\Infrastructure\Doctrine\Repository\{
+	DoctrineActionRepository,
+	DoctrineIssueStateRepository,
+	DoctrineIssueRepository,
+	DoctrineNotificationRepository,
+	DoctrineRoleRepository,
+	DoctrineUserRepository,
+};
+use Doctrine\ORM\{
+	EntityManager,
+	EntityManagerInterface,
+	ORMSetup
+};
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Views\Twig;
+use Symfony\Bridge\Twig\Extension\TranslationExtension;
+use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
+use Twig\TwigFunction;
 
 return [
 	'settings' => fn() => require __DIR__ . '/settings.php',
@@ -55,9 +66,29 @@ return [
 
 	ActionRepositoryInterface::class => fn(ContainerInterface $c) =>
 		new DoctrineActionRepository($c->get(EntityManagerInterface::class)),
+
+	IssueStateRepositoryInterface::class => fn(ContainerInterface $c) =>
+		new DoctrineIssueStateRepository($c->get(EntityManagerInterface::class)),
+
+	NotificationRepositoryInterface::class => fn(ContainerInterface $c) =>
+		new DoctrineNotificationRepository($c->get(EntityManagerInterface::class)),
 		// --------------------------------------------------------------------
 
 	AuthorizationService::class => fn() => new AuthorizationService(),
+
+	Translator::class => function (ContainerInterface $c) {
+		$defaultLocale = $_ENV['APP_LOCALE'] ?? 'de';
+
+		$translator = new Translator($defaultLocale);
+		$translator->setFallbackLocales(['de']);
+		$translator->addLoader('yaml', new YamlFileLoader());
+
+		$translationsDir = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'translations';
+		$translator->addResource('yaml', $translationsDir . '/de.yaml', 'de');
+		$translator->addResource('yaml', $translationsDir . '/en.yaml', 'en');
+
+		return $translator;
+	},
 
 	Twig::class => function (ContainerInterface $c) {
 
@@ -73,6 +104,7 @@ return [
 		$viewEnv = $view->getEnvironment();
 
 		$viewEnv->addGlobal('version', $version);
+		$viewEnv->addGlobal('locale', $_ENV['APP_LOCALE'] ?? 'en');
 
 		$viewEnv->addGlobal('csrf', [
 			'name_key' => $csrf->getTokenNameKey(),
@@ -80,6 +112,17 @@ return [
 			'value_key' => $csrf->getTokenValueKey(),
 			'value' => $csrf->getTokenValue(),
 		]);
+
+		$viewEnv->addExtension(new TranslationExtension($c->get(Translator::class)));
+		$translator = $c->get(Translator::class);
+
+		$view->getEnvironment()->addFunction(new TwigFunction('status_label', function (IssueState $status) use ($translator) {
+			$key = 'issue.status.' . $status->getKey();
+			return $translator->getCatalogue()->has($key)
+				? $translator->trans($key)
+				: throw new \InvalidArgumentException("Status label for key '{$status->getKey()}' not found.");
+		}));
+
 		return $view;
 	},
 ];

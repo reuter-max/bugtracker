@@ -13,6 +13,6 @@ final class NewIssueFormAction {
 	}
 
 	public function __invoke(Request $request, Response $response): Response {
-		return $this->view->render($response, 'issues/_issue_form.twig');
+		return $this->view->render($response, 'issues/issue_form.twig');
 	}
 }

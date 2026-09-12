@@ -11,9 +11,8 @@ use Ramsey\Uuid\Uuid;
 #[ORM\Entity]
 #[ORM\Table(name: 'issues')]
 class Issue {
-	public const STATUS_OPEN = 'open';
-	public const STATUS_IN_PROGRESS = 'in_progress';
-	public const STATUS_CLOSED = 'closed';
+
+	public const DEFAULT_STATE_KEY = 'open';
 
 	#[ORM\Id]
 	#[ORM\Column(type: 'string', length: 36, unique: true)]
@@ -28,8 +27,9 @@ class Issue {
 	#[ORM\Column(type: 'text')]
 	private string $description;
 
-	#[ORM\Column(type: 'string', length: 30)]
-	private string $status;
+	#[ORM\ManyToOne(targetEntity: IssueState::class)]
+	#[ORM\JoinColumn(name: 'status_id', referencedColumnName: 'id', nullable: false)]
+	private IssueState $status;
 
 	#[ORM\ManyToOne(targetEntity: User::class)]
 	#[ORM\JoinColumn(name: 'reporter_id', referencedColumnName: 'id', nullable: false)]
@@ -45,11 +45,11 @@ class Issue {
 	#[ORM\Column(type: 'datetime_immutable')]
 	private DateTimeImmutable $updated_at;
 
-	public function __construct(string $title, string $description, User $reporter) {
+	public function __construct(string $title, string $description, User $reporter, IssueState $initialStatus) {
 		$this->id = Uuid::uuid4()->toString();
 		$this->title = $title;
 		$this->description = $description;
-		$this->status = self::STATUS_OPEN;
+		$this->status = $initialStatus;
 		$this->reporter = $reporter;
 		$this->created_at = new DateTimeImmutable();
 		$this->updated_at = new DateTimeImmutable();
@@ -71,11 +71,11 @@ class Issue {
 		return $this->description;
 	}
 
-	public function getStatus(): string {
+	public function getStatus(): IssueState {
 		return $this->status;
 	}
 
-	public function setStatus(string $status): void {
+	public function setStatus(IssueState $status): void {
 		$this->status = $status;
 		$this->touch();
 	}

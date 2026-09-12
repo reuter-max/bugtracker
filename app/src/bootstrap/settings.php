@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 return [
 	'db' => [
-		'driver'   => 'pdo_pgsql',
-		'host'	 => $_ENV['DB_HOST'] ?? 'db',
-		'port'	 => (int) ($_ENV['DB_PORT'] ?? 5432),
-		'dbname'   => $_ENV['DB_NAME'] ?? 'bugtracker',
-		'user'	 => $_ENV['DB_USER'] ?? 'bugtracker',
-		'password' => $_ENV['DB_PASSWORD'] ?? 'bugtracker',
+		'driver' => 'pdo_pgsql',
+		'host' => $_ENV['DB_HOST'] ?? 'db',
+		'port' => (int) ($_ENV['DB_PORT'] ?? 5432),
+		'dbname' => $_ENV['DB_NAME'] ?? 'bugtracker_db',
+		'user' => $_ENV['DB_USER'] ?? 'bugtracker_usr',
+		'password' => $_ENV['DB_PASS'] ?? 'bugtracker_pass',
 	],
 	'doctrine' => [
 		// Attribute-Mapping direkt aus den Domain-Entities.

@@ -1,19 +1,19 @@
 <section id="login-form-wrapper" class="flex-center flex-grow">
 	<form hx-post="/login" hx-target="#login-form-wrapper" hx-swap="outerHTML">
-		<h2>Anmelden</h2>
+		<h2>{{ 'auth.login.title'|trans }}</h2>
 
 		<label>
-			<span>E-Mail</span>
+			<span>{{ 'auth.login.email'|trans }}</span>
 			<input type="email" name="email" required>
 		</label>
 
 		<label>
-			<span>Password</span>
+			<span>{{ 'auth.login.password'|trans }}</span>
 			<input type="password" name="password" required>
 		</label>
 
 		<button type="submit">
-			Anmelden
+			{{ 'auth.login.submit'|trans }}
 		</button>
 
 		{% if error %}

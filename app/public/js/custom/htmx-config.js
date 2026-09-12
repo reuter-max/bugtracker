@@ -22,7 +22,6 @@ document.addEventListener('htmx:afterSwap', function (event) {
 	}
 });
 
-// Server kann per "HX-Trigger: closeModal"-Header das Schliessen ausloesen
 document.addEventListener('closeModal', function () {
 	document.getElementById('modal').close();
 });

@@ -1,5 +1,5 @@
 /app/vendor/
-/app/.env
 /app/var/cache/
 .DS_Store
 Thumbs.db
+**/.env

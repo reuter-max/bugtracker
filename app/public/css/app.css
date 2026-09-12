@@ -3,6 +3,7 @@
 @import url('./custom/colors.css');
 @import url('./custom/login.css');
 @import url('./custom/dialog.css');
+@import url('./custom/typo.css');
 
 @import url('./custom/layout/layout.css');
 
@@ -35,11 +36,7 @@ body {
 	flex-direction: column;
 }
 
-.avatar {
-	background-color: var(--light-gray);
-	width: 2.5rem;
-	height: 2.5rem;
-	border-radius: 50%;
-	overflow: hidden;
-	border: 1px solid var(--dark-gray);
+input,
+select {
+	width: fit-content;
 }

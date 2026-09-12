@@ -1,0 +1,25 @@
+auth:
+    login:
+        title: Anmelden
+        error: E-Mail oder Passwort ist falsch.
+        email: E-Mail 
+        password: Passwort
+        submit: Login
+    logout: Abmelden
+issue:
+    title: Issues
+    create: Neues Issue
+    refresh: Aktualisieren
+    not_found: Issue nicht gefunden.
+    title_empty: Titel darf nicht leer sein.
+    assigned: 'Dir wurde Issue #%number% zugewiesen'
+    changed: 'Issue #%number% wurde geändert'
+    created: 'Issue #%number% wurde erstellt'
+    empty: 'Keine Issues gefunden.'
+    status:
+        open: Offen
+        in_progress: In Bearbeitung
+        closed: Geschlossen
+        _invalid: Ungültiger Status.
+user:
+    not_found: Unbekannter Benutzer.

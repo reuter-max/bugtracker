@@ -7,9 +7,9 @@
 	</td>
 	<td>
 		<select hx-put="/issues/{{ issue.id }}" hx-vals='js:{"status": event.target.value}' hx-trigger="change" hx-target="closest tr" hx-swap="outerHTML">
-			<option value="open" {{ issue.status == 'open' ? 'selected' }}>open</option>
-			<option value="in_progress" {{ issue.status == 'in_progress' ? 'selected' }}>in_progress</option>
-			<option value="closed" {{ issue.status == 'closed' ? 'selected' }}>closed</option>
+			{% for status in statuses %}
+				<option value="{{ status.key }}" {{ issue.status.key == status.key ? 'selected' }}>{{ status_label(status) }}</option>
+			{% endfor %}
 		</select>
 	</td>
 	<td>

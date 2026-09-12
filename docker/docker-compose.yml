@@ -1,9 +1,10 @@
+name: ${COMPOSE_PROJECT_NAME}
 services:
   webserver:
     build: ./webserver
     container_name: webserver
     ports:
-      - "8080:80"
+      - "${APP_PORT}:80"
     volumes:
       - ../app/public:/var/www/html/public:ro
     depends_on:
@@ -14,14 +15,18 @@ services:
   app:
     build: ./app
     container_name: application
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      DB_PASS: ${DB_PASS}
+      APP_ADMIN_MAIL: ${APP_ADMIN_MAIL}
+      APP_ADMIN_USER: ${APP_ADMIN_USER}
+      APP_ADMIN_PASS: ${APP_ADMIN_PASS}
+      APP_LOCALE: ${APP_LOCALE}
     volumes:
       - ../app:/var/www/html
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_NAME: bugtracker
-      DB_USER: bugtracker
-      DB_PASSWORD: bugtracker
     depends_on:
       - db
     networks:
@@ -31,9 +36,9 @@ services:
     image: postgres:16-alpine
     container_name: database
     environment:
-      POSTGRES_DB: bugtracker
-      POSTGRES_USER: bugtracker
-      POSTGRES_PASSWORD: bugtracker
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:

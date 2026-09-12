@@ -20,13 +20,9 @@
 
 		<tbody id="issue-table-body">
 			{% for issue in issues %}
-				{% include 'issues/_issue_row.twig' %}
+				{% include 'issues/issue_row.twig' %}
 			{% else %}
-				<tr>
-					<td colspan="{{ headlines|length }}">
-						Keine Issues gefunden.
-					</td>
-				</tr>
+				{% include 'issues/issue_row_placeholder.twig' %}
 			{% endfor %}
 		</tbody>
 	</table>

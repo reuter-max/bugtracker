@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 
 declare(strict_types=1);
@@ -11,10 +10,6 @@ use App\Domain\Repository\RoleRepositoryInterface;
 use App\Domain\Repository\UserRepositoryInterface;
 
 require __DIR__ . '/../vendor/autoload.php';
-
-if (file_exists(__DIR__ . '/../.env')) {
-	Dotenv\Dotenv::createImmutable(__DIR__ . '/../')->load();
-}
 
 $containerBuilder = new DI\ContainerBuilder();
 $containerBuilder->addDefinitions(__DIR__ . '/../src/bootstrap/dependencies.php');
@@ -50,21 +45,16 @@ foreach ($actions as $action) {
 }
 $roleRepo->save($admin);
 
-$developer = $roleRepo->findByName('Entwickler') ?? new Role('Entwickler');
-$developer->grant($actions['issue.create']);
-$developer->grant($actions['issue.edit']);
-$roleRepo->save($developer);
-
-$visitor = $roleRepo->findByName('Besucher') ?? new Role('Besucher');
-// Besucher bekommt bewusst keine Actions -- darf nur lesen.
-$roleRepo->save($visitor);
+$adminName = $_ENV['APP_ADMIN_USER'] ?? 'Administrator';
+$adminEmail = $_ENV['APP_ADMIN_MAIL'] ?? 'admin@example.com';
+$adminPassword = $_ENV['APP_ADMIN_PASS'] ?? 'changeme';
 
 // -- Admin-User anlegen --
-if (!$userRepo->findByEmail('admin@example.com')) {
-	$adminUser = new User('admin@example.com', 'Administrator', password_hash('changeme', PASSWORD_DEFAULT));
+if (!$userRepo->findByEmail($adminEmail)) {
+	$adminUser = new User($adminEmail, $adminName, password_hash($adminPassword, PASSWORD_DEFAULT));
 	$adminUser->addRole($admin);
 	$userRepo->save($adminUser);
-	echo "Admin-User angelegt: admin@example.com / changeme\n";
+	echo "Admin-User angelegt: $adminEmail / $adminPassword\n";
 } else {
 	echo "Admin-User existiert bereits.\n";
 }

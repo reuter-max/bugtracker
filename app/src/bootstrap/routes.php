@@ -11,6 +11,7 @@ use App\Application\Actions\Issue\{
 	NewIssueFormAction,
 	UpdateIssueAction
 };
+use App\Application\Actions\Notification\NotificationsAction;
 use App\Application\Middleware\{
 	AuthenticationMiddleware,
 	PermissionMiddleware
@@ -47,5 +48,6 @@ return function (App $app) {
 		$group->put('/issues/{id}/assign', AssignIssueAction::class)->add($requires('issue.edit'));
 		$group->delete('/issues/{id}', DeleteIssueAction::class)->add($requires('issue.delete'));
 		$group->get('/issues/new', NewIssueFormAction::class);
+		$group->get('/notifications', NotificationsAction::class);
 	})->add(AuthenticationMiddleware::class);
 };

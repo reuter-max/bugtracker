@@ -7,12 +7,13 @@
 					{{ user.displayName }}
 				</b>
 			</span>
-			<div class="avatar flex-center">
-				<i class="fa-regular fa-user"></i>
+			<span>|</span>
+			<div hx-get="/notifications" hx-trigger="load, every 15s" hx-swap="innerHTML">
+				{% include 'notifications.twig' with {'notifications': [], 'unread_count': 0} %}
 			</div>
 			<span>|</span>
 			<button hx-post="/logout" hx-swap="none">
-				Abmelden 
+				{{ 'auth.logout'|trans }}
 				<i class="fa-solid fa-arrow-right-from-bracket"></i> 
 			</button>
 		</div>

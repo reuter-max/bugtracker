@@ -1,14 +1,18 @@
 {% extends 'main.twig' %}
 {% block content %}
-	<h2>Issues</h2>
+	<h2>{{ 'issue.title'|trans }}</h2>
 
-	<section>
+	<div class="flex">
 		<button type="button" hx-get="/issues/new" hx-target="#modal-content" hx-swap="innerHTML">
-			<i class="fa-solid fa-plus"></i> Neues Issue
+			<i class="fa-solid fa-plus"></i> {{ 'issue.create'|trans }}
 		</button>
-	</section>
+
+		<button type="button" hx-get="/issues" hx-target="#issue-table-wrapper" hx-swap="innerHTML">
+			<i class="fa-solid fa-arrows-rotate"></i> {{ 'issue.refresh'|trans }}
+		</button>
+	</div>
 	
-	<div id="issue-table-wrapper" hx-get="/issues" hx-trigger="every 5s" hx-swap="innerHTML" hx-select="#issue-table-wrapper > table" hx-target="this">
-		{% include 'issues/_issue_table.twig' %}
+	<div id="issue-table-wrapper">
+		{% include 'issues/issue_table.twig' %}
 	</div>
 {% endblock %}

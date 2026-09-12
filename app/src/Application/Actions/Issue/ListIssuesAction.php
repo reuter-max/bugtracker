@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Issue;
 
-use App\Domain\Repository\IssueRepositoryInterface;
+use App\Domain\Repository\{IssueRepositoryInterface, IssueStateRepositoryInterface, UserRepositoryInterface};
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
@@ -13,7 +13,8 @@ final class ListIssuesAction {
 	public function __construct(
 		private readonly IssueRepositoryInterface $issues,
 		private readonly Twig $view,
-		private readonly \App\Domain\Repository\UserRepositoryInterface $users
+		private readonly UserRepositoryInterface $users,
+		private readonly IssueStateRepositoryInterface $statuses
 	) {
 	}
 
@@ -22,12 +23,13 @@ final class ListIssuesAction {
 		$issues = $status ? $this->issues->findByStatus($status) : $this->issues->findAll();
 
 		$isHtmxRequest = $request->getHeaderLine('HX-Request') === 'true';
-		$template = $isHtmxRequest ? 'issues/_issue_table.twig' : 'issues/list.twig';
+		$template = $isHtmxRequest ? 'issues/issue_table.twig' : 'issues/list.twig';
 
 		return $this->view->render($response, $template, [
 			'issues' => $issues,
 			'users' => $this->users->findAll(),
 			'user' => $request->getAttribute('user'),
+			'statuses' => $this->statuses->findAll()
 		]);
 	}
 }

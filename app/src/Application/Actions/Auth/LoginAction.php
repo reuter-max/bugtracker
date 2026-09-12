@@ -8,11 +8,13 @@ use App\Domain\Repository\UserRepositoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
+use Symfony\Component\Translation\Translator;
 
 final class LoginAction {
 	public function __construct(
 		private readonly UserRepositoryInterface $users,
 		private readonly Twig $view,
+		private readonly Translator $translator,
 	) {
 	}
 
@@ -32,7 +34,7 @@ final class LoginAction {
 				$response->withStatus(401),
 				'login/login_form.twig',
 				[
-					'error' => 'E-Mail oder Passwort ist falsch.'
+					'error' => $this->translator->trans('auth.login.error')
 				]
 			);
 		}

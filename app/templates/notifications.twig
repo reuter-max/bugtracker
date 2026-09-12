@@ -1,0 +1,15 @@
+<div id="notifications">
+	<button popovertarget="notification-list">
+		<i class="fa-solid fa-bell"></i>
+		{% if unread_count > 0 %}<span class="badge">{{ unread_count }}</span>{% endif %}
+	</button>
+	<div id="notification-list" popover>
+		{% for n in notifications %}
+			<div class="notification notification-{{ n.type }} {{ n.read ? 'read' : 'unread' }}">
+				{{ n.message }}
+			</div>
+		{% else %}
+			<p>Keine Benachrichtigungen.</p>
+		{% endfor %}
+	</div>
+</div>

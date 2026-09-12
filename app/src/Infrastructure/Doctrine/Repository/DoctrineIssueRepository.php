@@ -21,7 +21,15 @@ final class DoctrineIssueRepository implements IssueRepositoryInterface {
 	}
 
 	public function findByStatus(string $status): array {
-		return $this->em->getRepository(Issue::class)->findBy(['status' => $status], ['created_at' => 'DESC']);
+		return $this->em->createQueryBuilder()
+			->select('i')
+			->from(Issue::class, 'i')
+			->join('i.status', 's')
+			->where('s.key = :key')
+			->setParameter('key', $status)
+			->orderBy('i.created_at', 'DESC')
+			->getQuery()
+			->getResult();
 	}
 
 	public function save(Issue $issue): void {

@@ -4,24 +4,29 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Issue;
 
-use App\Domain\Repository\IssueRepositoryInterface;
+use App\Application\Service\NotificationService;
+use App\Domain\Repository\{IssueRepositoryInterface, IssueStateRepositoryInterface};
 use App\Domain\Repository\UserRepositoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
+use Symfony\Component\Translation\Translator;
 
 final class AssignIssueAction {
 	public function __construct(
 		private readonly IssueRepositoryInterface $issues,
 		private readonly UserRepositoryInterface $users,
+		private readonly IssueStateRepositoryInterface $statuses,
 		private readonly Twig $view,
+		private readonly Translator $translator,
+		private readonly NotificationService $notifications
 	) {
 	}
 
 	public function __invoke(Request $request, Response $response, array $args): Response {
 		$issue = $this->issues->find($args['id']);
 		if (!$issue) {
-			$response->getBody()->write('Issue nicht gefunden.');
+			$response->getBody()->write($this->translator->trans('issue.not_found'));
 			return $response->withStatus(404);
 		}
 
@@ -30,16 +35,28 @@ final class AssignIssueAction {
 
 		$assignee = $assigneeId !== '' ? $this->users->find($assigneeId) : null;
 		if ($assigneeId !== '' && !$assignee) {
-			$response->getBody()->write('Unbekannter Benutzer.');
+			$response->getBody()->write($this->translator->trans('user.not_found'));
 			return $response->withStatus(422);
 		}
 
 		$issue->assignTo($assignee);
 		$this->issues->save($issue);
 
-		return $this->view->render($response, 'issues/_issue_row.twig', [
+		if ($assignee) {
+			$this->notifications->notify(
+				$assignee,
+				$this->translator->trans(
+					'issue.assigned', [
+						'%number%' => $issue->getId()
+					]
+				)
+			);
+		}
+
+		return $this->view->render($response, 'issues/issue_row.twig', [
 			'issue' => $issue,
 			'users' => $this->users->findAll(),
+			'statuses' => $this->statuses->findAll()
 		]);
 	}
 }

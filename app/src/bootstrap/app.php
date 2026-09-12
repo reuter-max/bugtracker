@@ -9,11 +9,6 @@ use App\Application\Middleware\CsrfHeaderBridgeMiddleware;
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-// .env laden (DB-Zugangsdaten etc.)
-if (file_exists(__DIR__ . '/../../.env')) {
-	Dotenv\Dotenv::createImmutable(__DIR__ . '/../../')->load();
-}
-
 if (session_status() === PHP_SESSION_NONE) {
 	session_start();
 }
