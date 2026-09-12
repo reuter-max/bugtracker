@@ -1,0 +1,14 @@
+{% extends 'main.twig' %}
+{% block content %}
+	<h2>Issues</h2>
+
+	<section>
+		<button type="button" hx-get="/issues/new" hx-target="#modal-content" hx-swap="innerHTML">
+			<i class="fa-solid fa-plus"></i> Neues Issue
+		</button>
+	</section>
+	
+	<div id="issue-table-wrapper" hx-get="/issues" hx-trigger="every 5s" hx-swap="innerHTML" hx-select="#issue-table-wrapper > table" hx-target="this">
+		{% include 'issues/_issue_table.twig' %}
+	</div>
+{% endblock %}

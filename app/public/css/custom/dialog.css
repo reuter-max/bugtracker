@@ -1,0 +1,6 @@
+#modal-content {
+	border-radius: 1rem;
+	background-color: var(--pico-background-color);
+	padding: 2rem;
+	border: 1px solid var(--pico-table-border-color);
+}

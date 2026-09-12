@@ -1,0 +1,26 @@
+:root {
+	--red: rgba(200, 100, 100, 1);
+
+	--light-gray: rgba(200, 200, 200, 1);
+	--light-grey: var(--light-gray);
+	--light_gray: var(--light-gray);
+	--light_grey: var(--light-gray);
+
+	--dark-gray: rgba(100, 100, 100, 1);
+	--dark-grey: var(--dark-gray);
+	--dark_grey: var(--dark-gray);
+	--dark_gray: var(--dark-gray);
+}
+
+div.infobox,
+p.infobox {
+	border-radius: var(--pico-border-radius);
+	border-width: 1px;
+	border-style: solid;
+	padding: var(--pico-typography-spacing-vertical);
+}
+
+.warning {
+	border-color: var(--red);
+	color: var(--red);
+}

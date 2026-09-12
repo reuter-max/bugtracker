@@ -1,0 +1,13 @@
+<h3>Neues Issue erstellen</h3>
+<form hx-post="/issues" hx-target="#issue-table-body" hx-swap="afterbegin">
+	<div>
+		<label>Titel</label>
+		<input type="text" name="title" required>
+	</div>
+	<div>
+		<label>Beschreibung</label>
+		<input type="text" name="description">
+	</div>
+	<button type="submit">Anlegen</button>
+	<button type="button" onclick="document.getElementById('modal').close()">Abbrechen</button>
+</form>

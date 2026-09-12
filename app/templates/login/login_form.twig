@@ -1,0 +1,25 @@
+<section id="login-form-wrapper" class="flex-center flex-grow">
+	<form hx-post="/login" hx-target="#login-form-wrapper" hx-swap="outerHTML">
+		<h2>Anmelden</h2>
+
+		<label>
+			<span>E-Mail</span>
+			<input type="email" name="email" required>
+		</label>
+
+		<label>
+			<span>Password</span>
+			<input type="password" name="password" required>
+		</label>
+
+		<button type="submit">
+			Anmelden
+		</button>
+
+		{% if error %}
+			<p class="infobox warning">
+				<i class="fa-solid fa-triangle-exclamation"></i> {{ error }}
+			</p>
+		{% endif %}
+	</form>
+</section>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Bugtracker</title>
+
+		<script src="/js/_lib/htmx.min.js"></script>
+		<script src="/js/app.js" type="module"></script>
+		
+		<link rel="stylesheet" type="text/css" href="/css/_lib/fontawesome.all.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/_lib/pico.classless.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/app.css">
+
+	</head>
+	<body data-csrf-name="{{ csrf.name }}" data-csrf-value="{{ csrf.value }}">
+		{% include 'header.twig' %}
+		<main class="flex-column flex-grow">
+			{% include 'dialog.twig' %}
+			{% block content %}
+			{% endblock %}
+		</main>
+		</section>
+		{% include 'footer.twig' %}
+	</body>
+</html>

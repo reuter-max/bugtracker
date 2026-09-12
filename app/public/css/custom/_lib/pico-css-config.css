@@ -1,0 +1,23 @@
+:root {
+	/* Grundsätzlich kleinere Typografie */
+	--pico-font-size: 90%;
+
+	/* Weniger vertikaler Abstand */
+	--pico-spacing: 0.75rem;
+	--pico-typography-spacing-vertical: 0.5rem;
+
+	/* Kleinere Inputs / Selects / Buttons */
+	--pico-form-element-spacing-vertical: 0.5rem;
+	--pico-form-element-spacing-horizontal: 0.7rem;
+
+	/* Weniger runde Ecken */
+	--pico-border-radius: 0.75rem;
+
+	/* Kompaktere Navigation */
+	--pico-nav-element-spacing-vertical: 0.5rem;
+	--pico-nav-link-spacing-vertical: 0.25rem;
+}
+
+table select {
+	margin-bottom: 0 !important;
+}

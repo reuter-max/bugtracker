@@ -1,0 +1,46 @@
+services:
+  webserver:
+    build: ./webserver
+    container_name: webserver
+    ports:
+      - "8080:80"
+    volumes:
+      - ../app/public:/var/www/html/public:ro
+    depends_on:
+      - app
+    networks:
+      - bugtracker
+
+  app:
+    build: ./app
+    container_name: application
+    volumes:
+      - ../app:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: bugtracker
+      DB_USER: bugtracker
+      DB_PASSWORD: bugtracker
+    depends_on:
+      - db
+    networks:
+      - bugtracker
+
+  db:
+    image: postgres:16-alpine
+    container_name: database
+    environment:
+      POSTGRES_DB: bugtracker
+      POSTGRES_USER: bugtracker
+      POSTGRES_PASSWORD: bugtracker
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - bugtracker
+
+networks:
+  bugtracker:
+
+volumes:
+  db-data:

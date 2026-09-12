@@ -1,0 +1,33 @@
+{% set headlines = [
+	'Nr.',
+	'Titel',
+	'Status',
+	'Reporter',
+	'Entwickler',
+	'Erstellt',
+	''
+] %}
+
+<div id="issue-table-wrapper">
+	<table>
+		<thead>
+			<tr>
+				{% for headline in headlines %}
+					<th>{{ headline }}</th>
+				{% endfor %}
+			</tr>
+		</thead>
+
+		<tbody id="issue-table-body">
+			{% for issue in issues %}
+				{% include 'issues/_issue_row.twig' %}
+			{% else %}
+				<tr>
+					<td colspan="{{ headlines|length }}">
+						Keine Issues gefunden.
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>

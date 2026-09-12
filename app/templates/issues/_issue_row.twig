@@ -1,0 +1,36 @@
+<tr id="issue-{{ issue.id }}">
+	<td>
+		#{{ issue.number }}
+	</td>
+	<td>
+		{{ issue.title }}
+	</td>
+	<td>
+		<select hx-put="/issues/{{ issue.id }}" hx-vals='js:{"status": event.target.value}' hx-trigger="change" hx-target="closest tr" hx-swap="outerHTML">
+			<option value="open" {{ issue.status == 'open' ? 'selected' }}>open</option>
+			<option value="in_progress" {{ issue.status == 'in_progress' ? 'selected' }}>in_progress</option>
+			<option value="closed" {{ issue.status == 'closed' ? 'selected' }}>closed</option>
+		</select>
+	</td>
+	<td>
+		{{ issue.reporter.displayName }}
+	</td>
+	<td>
+		<select hx-put="/issues/{{ issue.id }}/assign" hx-vals='js:{"assignee_id": event.target.value}' hx-trigger="change" hx-target="closest tr" hx-swap="outerHTML">
+			<option value="">- keine/r -</option>
+			{% for candidate in users %}
+				<option value="{{ candidate.id }}" {{ issue.assignee and issue.assignee.id == candidate.id ? 'selected' }}>
+					{{ candidate.displayName }}
+				</option>
+			{% endfor %}
+		</select>
+	</td>
+	<td>
+		{{ issue.createdAt|date('d.m.Y H:i') }}
+	</td>
+	<td>
+		<button hx-delete="/issues/{{ issue.id }}" hx-target="closest tr" hx-swap="outerHTML">
+			<i class="fa-solid fa-trash-can"></i>
+		</button>
+	</td>
+</tr>
