@@ -115,6 +115,15 @@
 	justify-content: space-between;
 }
 
+.flex>select,
+.flex>label>select,
+.flex>input,
+.flex>label>input,
+.flex>textarea,
+.flex>label>textarea {
+	margin-bottom: 0 !important;
+}
+
 @media (max-width: 768px) {
 
 	.grid-2,
@@ -137,6 +146,6 @@
 	}
 
 	header.flex>div {
-		justify-content: flex-between;
+		justify-content: space-between;
 	}
 }

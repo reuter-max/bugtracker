@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Application\Service\AuthorizationService;
+use App\Application\Service\{AuthorizationService, AvailableLocalesProvider};
 use App\Domain\Entity\IssueState;
 use App\Domain\Repository\{ActionRepositoryInterface, IssueStateRepositoryInterface, NotificationRepositoryInterface};
 use App\Domain\Repository\IssueRepositoryInterface;
@@ -76,6 +76,10 @@ return [
 
 	AuthorizationService::class => fn() => new AuthorizationService(),
 
+	AvailableLocalesProvider::class => fn() => new AvailableLocalesProvider(
+		dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'translations'
+	),
+
 	Translator::class => function (ContainerInterface $c) {
 		$defaultLocale = $_ENV['APP_LOCALE'] ?? 'de';
 
@@ -84,8 +88,9 @@ return [
 		$translator->addLoader('yaml', new YamlFileLoader());
 
 		$translationsDir = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'translations';
-		$translator->addResource('yaml', $translationsDir . '/de.yaml', 'de');
-		$translator->addResource('yaml', $translationsDir . '/en.yaml', 'en');
+		foreach ($c->get(AvailableLocalesProvider::class)->all() as $locale) {
+			$translator->addResource('yaml', $translationsDir . "/{$locale}.yaml", $locale);
+		}
 
 		return $translator;
 	},
@@ -104,7 +109,8 @@ return [
 		$viewEnv = $view->getEnvironment();
 
 		$viewEnv->addGlobal('version', $version);
-		$viewEnv->addGlobal('locale', $_ENV['APP_LOCALE'] ?? 'en');
+		$viewEnv->addGlobal('current_locale', $_SESSION['locale'] ?? $_ENV['APP_LOCALE'] ?? 'en');
+		$viewEnv->addGlobal('available_locales', $c->get(AvailableLocalesProvider::class)->all());
 
 		$viewEnv->addGlobal('csrf', [
 			'name_key' => $csrf->getTokenNameKey(),
@@ -116,6 +122,12 @@ return [
 		$viewEnv->addExtension(new TranslationExtension($c->get(Translator::class)));
 		$translator = $c->get(Translator::class);
 
+		// Twing-Funktion "locale_name()", um die Sprachenauswahl immer in Ihrer eigenen Sprache darzustellen
+		$view->getEnvironment()->addFunction(new TwigFunction('locale_name', function (string $locale) use ($translator) {
+			return \Locale::getDisplayLanguage($locale, $locale);
+		}));
+
+		// Twing-Funktion "status_label()", um die Labels der Statuswerte localized darzustellen
 		$view->getEnvironment()->addFunction(new TwigFunction('status_label', function (IssueState $status) use ($translator) {
 			$key = 'status.' . $status->getKey();
 			return $translator->getCatalogue()->has($key)

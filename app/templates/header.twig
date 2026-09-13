@@ -1,21 +1,27 @@
-<header class="flex justify-between">
-	<h1>Bugtracker</h1>
-	{% if user %}
+<header class="flex-row justify-between">
+	<div class="flex justify-between flex-grow">
+		<h1>Bugtracker</h1>
 		<div class="flex items-center gap-sm">
-			<span>
-				<b>
-					{{ user.displayName }}
-				</b>
-			</span>
-			<span>|</span>
-			<div hx-get="/notifications" hx-trigger="load, every 15s" hx-swap="innerHTML">
-				{% include 'notifications.twig' with {'notifications': [], 'unread_count': 0} %}
-			</div>
-			<span>|</span>
-			<button hx-post="/logout" hx-swap="none">
-				{{ 'auth.logout'|trans }}
-				<i class="fa-solid fa-arrow-right-from-bracket"></i> 
-			</button>
+			<label>
+				<i class="fa-solid fa-language"></i>
+				<select name="locale" hx-post="/locale" hx-trigger="change">
+					{% for locale in available_locales %}
+						<option value="{{ locale }}" {{ current_locale == locale ? 'selected' }}>{{ locale_name(locale) }}</option>
+					{% endfor %}
+				</select>
+			</label>
 		</div>
-	{% endif %}
+	</div>
 </header>
+{% if user %}
+<header class="flex justify-end items-center gap-sm">
+	<span>{{ user.displayName }}</span>
+	<div hx-get="/notifications" hx-trigger="load, every 15s" hx-swap="innerHTML">
+		{% include 'notifications.twig' with {'notifications': [], 'unread_count': 0} %}
+	</div>
+	<button hx-post="/logout" hx-swap="none">
+		{{ 'auth.logout'|trans }}
+		<i class="fa-solid fa-arrow-right-from-bracket"></i> 
+	</button>
+</header>
+{% endif %}

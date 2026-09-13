@@ -11,6 +11,7 @@ use App\Application\Actions\Issue\{
 	NewIssueFormAction,
 	UpdateIssueAction
 };
+use App\Application\Actions\Locale\LocaleSwitchAction;
 use App\Application\Actions\Notification\NotificationsAction;
 use App\Application\Middleware\{
 	AuthenticationMiddleware,
@@ -28,6 +29,7 @@ return function (App $app) {
 	$app->get('/login', [LoginAction::class, 'showForm']);
 	$app->post('/login', [LoginAction::class, 'login']);
 	$app->post('/logout', [LoginAction::class, 'logout']);
+	$app->post('/locale', LocaleSwitchAction::class);
 
 	// --- Geschuetzter Bereich -------------------------------------------
 
