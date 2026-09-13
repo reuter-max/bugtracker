@@ -1,13 +1,13 @@
-<h3>Neues Issue erstellen</h3>
+<h3>{{ 'issue.form.headline'|trans }}</h3>
 <form hx-post="/issues" hx-target="#issue-table-body" hx-swap="beforeend" hx-on::after-request="document.getElementById('placeholder-row')?.remove()">
 	<div>
-		<label>Titel</label>
+		<label>{{ 'issue.form.label_title'|trans }}</label>
 		<input spellcheck="true" autocorrect="on" autocomplete="on" type="text" name="title" required>
 	</div>
 	<div>
-		<label>Beschreibung</label>
+		<label>{{ 'issue.form.label_description'|trans }}</label>
 		<input spellcheck="true" autocorrect="on" autocomplete="on" type="text" name="description">
 	</div>
-	<button type="submit">Anlegen</button>
-	<button type="button" onclick="document.getElementById('modal').close()">Abbrechen</button>
+	<button type="submit">{{ 'issue.form.btn_create'|trans }}</button>
+	<button type="button" onclick="document.getElementById('modal').close()">{{ 'issue.form.btn_abort'|trans }}</button>
 </form>

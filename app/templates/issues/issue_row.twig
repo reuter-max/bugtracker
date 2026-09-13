@@ -17,7 +17,7 @@
 	</td>
 	<td>
 		<select hx-put="/issues/{{ issue.id }}/assign" hx-vals='js:{"assignee_id": event.target.value}' hx-trigger="change" hx-target="closest tr" hx-swap="outerHTML">
-			<option value="">- keine/r -</option>
+			<option value="">{{ 'user._none'|trans }}</option>
 			{% for candidate in users %}
 				<option value="{{ candidate.id }}" {{ issue.assignee and issue.assignee.id == candidate.id ? 'selected' }}>
 					{{ candidate.displayName }}

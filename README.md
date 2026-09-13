@@ -40,7 +40,7 @@ The recommended way to install the application is using Docker Compose.
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/your-project.git
+   git clone https://github.com/reuter-max/bugtracker.git
    cd your-project
    ```
 

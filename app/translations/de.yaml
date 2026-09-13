@@ -16,10 +16,24 @@ issue:
     changed: 'Issue #%number% wurde geändert'
     created: 'Issue #%number% wurde erstellt'
     empty: 'Keine Issues gefunden.'
-    status:
-        open: Offen
-        in_progress: In Bearbeitung
-        closed: Geschlossen
-        _invalid: Ungültiger Status.
+    form:
+      headline: Neues Issue erstellen
+      label_title: Titel
+      label_description: Beschreibung
+      btn_create: Anlegen
+      btn_abort: Abbrechen
+    table:
+        nr: Nr.
+        title: Titel
+        status: Status
+        reporter: Reporter
+        assigned_to: Zugewiesen an
+        created: Erstellt
 user:
     not_found: Unbekannter Benutzer.
+    _none: '- keine/r -'
+status:
+    open: Offen
+    in_progress: In Bearbeitung
+    closed: Geschlossen
+    _invalid: Ungültiger Status.

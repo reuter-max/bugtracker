@@ -117,7 +117,7 @@ return [
 		$translator = $c->get(Translator::class);
 
 		$view->getEnvironment()->addFunction(new TwigFunction('status_label', function (IssueState $status) use ($translator) {
-			$key = 'issue.status.' . $status->getKey();
+			$key = 'status.' . $status->getKey();
 			return $translator->getCatalogue()->has($key)
 				? $translator->trans($key)
 				: throw new \InvalidArgumentException("Status label for key '{$status->getKey()}' not found.");
