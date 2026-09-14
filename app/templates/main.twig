@@ -13,7 +13,12 @@
 		<link rel="stylesheet" type="text/css" href="/css/app.css">
 
 	</head>
-	<body data-csrf-name="{{ csrf.name }}" data-csrf-value="{{ csrf.value }}">
+	<body
+		data-csrf-name="{{ csrf.name }}"
+		data-csrf-value="{{ csrf.value }}"
+		data-user-id="{{user ? user.id : ''}}"
+		data-ws-port="{{ websocket_port }}"
+	>
 		{% include 'header.twig' %}
 		<main class="flex-column flex-grow">
 			{% include 'dialog.twig' %}

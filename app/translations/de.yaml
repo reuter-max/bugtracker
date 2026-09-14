@@ -13,6 +13,7 @@ issue:
     not_found: Issue nicht gefunden.
     title_empty: Titel darf nicht leer sein.
     assigned: 'Dir wurde Issue #%number% zugewiesen'
+    unassigned: 'Issue #%number% wurde dir entzogen'
     changed: 'Issue #%number% wurde geändert'
     created: 'Issue #%number% wurde erstellt'
     empty: 'Keine Issues gefunden.'

@@ -23,7 +23,8 @@ final class NotificationService {
 		// Fuer sofortige Zustellung, FALLS der Empfaenger gerade per WebSocket
 		// verbunden ist. Ist er es nicht, bleibt die Nachricht trotzdem in der
 		// DB und erscheint beim naechsten Laden/Aktualisieren der Inbox.
-		$this->redis->publish('notifications.' . $recipient->getId(), json_encode([
+		$this->redis->publish('notifications', json_encode([
+			'recipient_id' => $recipient->getId(),
 			'id' => $notification->getId(),
 			'message' => $message,
 			'type' => $type,

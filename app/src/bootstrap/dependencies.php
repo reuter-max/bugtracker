@@ -29,6 +29,7 @@ use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Twig\TwigFunction;
+use Predis\Client as RedisClient;
 
 return [
 	'settings' => fn() => require __DIR__ . '/settings.php',
@@ -80,10 +81,14 @@ return [
 		dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'translations'
 	),
 
-	Translator::class => function (ContainerInterface $c) {
-		$defaultLocale = $_ENV['APP_LOCALE'] ?? 'de';
+	RedisClient::class => fn() => new RedisClient([
+		'scheme' => 'tcp',
+		'host' => $_ENV['REDIS_HOST'] ?? 'localhost',
+		'port' => $_ENV['REDIS_PORT'] ?? 6379,
+	]),
 
-		$translator = new Translator($defaultLocale);
+	Translator::class => function (ContainerInterface $c) {
+		$translator = new Translator($_ENV['APP_LOCALE'] ?? 'en');
 		$translator->setFallbackLocales(['de']);
 		$translator->addLoader('yaml', new YamlFileLoader());
 
@@ -109,6 +114,7 @@ return [
 		$viewEnv = $view->getEnvironment();
 
 		$viewEnv->addGlobal('version', $version);
+		$viewEnv->addGlobal('websocket_port', $_ENV['WEBSOCKET_PORT'] ?? 8081);
 		$viewEnv->addGlobal('current_locale', $_SESSION['locale'] ?? $_ENV['APP_LOCALE'] ?? 'en');
 		$viewEnv->addGlobal('available_locales', $c->get(AvailableLocalesProvider::class)->all());
 

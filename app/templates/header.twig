@@ -10,15 +10,15 @@
 					{% endfor %}
 				</select>
 			</label>
+		<div {% if user %} hx-get="/notifications" hx-trigger="load" {% endif %} hx-swap="innerHTML">
+			{% include 'notifications.twig' with {'notifications': [], 'unread_count': 0} %}
+		</div>
 		</div>
 	</div>
 </header>
 {% if user %}
 <header class="flex justify-end items-center gap-sm">
 	<span>{{ user.displayName }}</span>
-	<div hx-get="/notifications" hx-trigger="load, every 15s" hx-swap="innerHTML">
-		{% include 'notifications.twig' with {'notifications': [], 'unread_count': 0} %}
-	</div>
 	<button hx-post="/logout" hx-swap="none">
 		{{ 'auth.logout'|trans }}
 		<i class="fa-solid fa-arrow-right-from-bracket"></i> 

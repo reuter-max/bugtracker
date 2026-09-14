@@ -4,6 +4,7 @@
 @import url('./custom/login.css');
 @import url('./custom/dialog.css');
 @import url('./custom/typo.css');
+@import url('./custom/notification.css');
 
 @import url('./custom/layout/layout.css');
 
@@ -11,6 +12,10 @@ main,
 header,
 footer {
 	padding: 1.5rem !important;
+	overflow: auto;
+}
+
+main>* {
 	overflow: auto;
 }
 

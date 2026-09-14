@@ -30,6 +30,8 @@ final class AssignIssueAction {
 			return $response->withStatus(404);
 		}
 
+		$previousAssignee = $issue->getAssignee();
+
 		$data = (array) $request->getParsedBody();
 		$assigneeId = $data['assignee_id'] ?? '';
 
@@ -47,6 +49,17 @@ final class AssignIssueAction {
 				$assignee,
 				$this->translator->trans(
 					'issue.assigned', [
+						'%number%' => $issue->getId()
+					]
+				)
+			);
+		}
+
+		if ($previousAssignee && $assignee !== $previousAssignee && $assignee === null) {
+			$this->notifications->notify(
+				$previousAssignee,
+				$this->translator->trans(
+					'issue.unassigned', [
 						'%number%' => $issue->getId()
 					]
 				)
