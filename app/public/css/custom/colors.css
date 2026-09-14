@@ -1,5 +1,7 @@
 :root {
 	--red: rgba(200, 100, 100, 1);
+	--blue: rgba(100, 100, 200, 1);
+	--yellow: rgba(200, 200, 100, 1);
 
 	--light-gray: rgba(200, 200, 200, 1);
 	--light-grey: var(--light-gray);
@@ -12,15 +14,26 @@
 	--dark_gray: var(--dark-gray);
 }
 
-div.infobox,
-p.infobox {
+*.infobox {
 	border-radius: var(--pico-border-radius);
 	border-width: 1px;
 	border-style: solid;
 	padding: var(--pico-typography-spacing-vertical);
 }
 
+.no-border {
+	border: none !important;
+	padding: initial !important;
+}
+
+.info {
+	border-color: var(--yellow);
+	text-decoration-color: var(--yellow);
+	color: var(--yellow);
+}
+
 .warning {
 	border-color: var(--red);
+	text-decoration-color: var(--red);
 	color: var(--red);
 }

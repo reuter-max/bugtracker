@@ -1,12 +1,22 @@
 
-<footer class="flex justify-between">
+<footer class="flex items-center justify-between">
 	<span>
-		<i class="fa-solid fa-tag"></i> Bugtracker {{ version }}
+		<span>
+			<i class="fa-solid fa-tag"></i> Bugtracker {{ version.current }}
+		</span>
 		<span>|</span>
 		<a href="https://github.com/reuter-max/bugtracker" target="_blank">
 			<i class="fa-brands fa-github"></i> GitHub
 		</a>
 	</span>
+	{% if version.update_available %}
+	<span>
+		{{ 'app.update_available'|trans }}
+		<a href="{{ version.url }}" target="_blank">
+			<i class="fa-solid fa-cloud-arrow-up"></i> {{ version.latest }}
+		</a>
+	</span>
+	{% endif %}
 	<span>
 		<span>
 			<i class="fa-regular fa-copyright"></i>2026 Bugtracker

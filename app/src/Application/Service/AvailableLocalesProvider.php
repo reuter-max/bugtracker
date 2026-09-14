@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Application\Service;
 
 final class AvailableLocalesProvider {
-	public function __construct(private readonly string $translationsDir) {
+	public function __construct(
+		private readonly string $translationsDir
+	) {
 	}
 
 	/** @return string[] */

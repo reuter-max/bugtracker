@@ -38,3 +38,5 @@ status:
     in_progress: In Bearbeitung
     closed: Geschlossen
     _invalid: Ungültiger Status.
+app:
+    update_available: Update verfügbar

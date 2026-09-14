@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Application\Service\{AuthorizationService, AvailableLocalesProvider};
+use App\Application\Service\{AuthorizationService, AvailableLocalesProvider, VersionChecker, VersionService};
 use App\Domain\Entity\IssueState;
 use App\Domain\Repository\{ActionRepositoryInterface, IssueStateRepositoryInterface, NotificationRepositoryInterface};
 use App\Domain\Repository\IssueRepositoryInterface;
@@ -23,6 +23,7 @@ use Doctrine\ORM\{
 };
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Slim\Csrf\Guard;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Views\Twig;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
@@ -77,6 +78,8 @@ return [
 
 	AuthorizationService::class => fn() => new AuthorizationService(),
 
+	VersionService::class => fn() => new VersionService(),
+
 	AvailableLocalesProvider::class => fn() => new AvailableLocalesProvider(
 		dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'translations'
 	),
@@ -107,17 +110,17 @@ return [
 			'cache' => $settings['cache_enabled'] ? __DIR__ . '/../../var/cache/twig' : false,
 		]);
 
-		$csrf = $c->get(Slim\Csrf\Guard::class);
-
-		$version = trim(file_get_contents(dirname((dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'VERSION'));
 
 		$viewEnv = $view->getEnvironment();
 
-		$viewEnv->addGlobal('version', $version);
 		$viewEnv->addGlobal('websocket_port', $_ENV['WEBSOCKET_PORT'] ?? 8081);
 		$viewEnv->addGlobal('current_locale', $_SESSION['locale'] ?? $_ENV['APP_LOCALE'] ?? 'en');
 		$viewEnv->addGlobal('available_locales', $c->get(AvailableLocalesProvider::class)->all());
 
+		$versionCheck = $c->get(VersionService::class);
+		$viewEnv->addGlobal('version', $versionCheck->check());
+
+		$csrf = $c->get(Guard::class);
 		$viewEnv->addGlobal('csrf', [
 			'name_key' => $csrf->getTokenNameKey(),
 			'name' => $csrf->getTokenName(),
